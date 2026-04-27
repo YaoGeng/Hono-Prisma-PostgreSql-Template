@@ -1,3 +1,9 @@
+/**
+ * 环境变量加载与校验
+ * 优先加载 .env.{APP_ENV}，再用 .env 补全；APP_ENV 自动映射为 NODE_ENV
+ * 最终通过 Zod schema 统一校验
+ */
+
 import { existsSync } from "node:fs";
 import path from "node:path";
 import dotenv from "dotenv";
@@ -6,6 +12,7 @@ import { z } from "zod";
 const appEnvSchema = z.enum(["dev", "test", "prod"]);
 const nodeEnvSchema = z.enum(["development", "test", "production"]);
 
+// APP_ENV → NODE_ENV 映射关系
 const appEnvToNodeEnv: Record<z.infer<typeof appEnvSchema>, z.infer<typeof nodeEnvSchema>> = {
   dev: "development",
   test: "test",
@@ -14,8 +21,8 @@ const appEnvToNodeEnv: Record<z.infer<typeof appEnvSchema>, z.infer<typeof nodeE
 
 const appEnv = appEnvSchema.parse(process.env.APP_ENV ?? "dev");
 
-// .env.{APP_ENV} takes priority; .env fills remaining gaps
-// Platform / cross-env values always win (override: false)
+// .env.{APP_ENV} 优先加载，.env 补全缺失项
+// 平台/cross-env 注入的变量始终优先（override: false）
 const envFile = path.resolve(`.env.${appEnv}`);
 if (existsSync(envFile)) {
   dotenv.config({ path: envFile, override: false });
@@ -30,6 +37,7 @@ if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = appEnvToNodeEnv[appEnv];
 }
 
+// Zod schema：统一校验所有环境变量
 const envSchema = z.object({
   APP_ENV: appEnvSchema.default("dev"),
   NODE_ENV: nodeEnvSchema.default("development"),

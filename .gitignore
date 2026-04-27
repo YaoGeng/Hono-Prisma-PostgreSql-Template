@@ -9,3 +9,4 @@ node_modules
 /generated/prisma
 # TypeScript 编译输出（可由 npm run build 重新生成）
 dist
+.sisyphus

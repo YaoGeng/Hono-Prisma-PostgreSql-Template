@@ -1,3 +1,8 @@
+/**
+ * 应用入口文件
+ * 初始化 Hono 实例、挂载路由、启动服务，并注册进程信号与异常处理
+ */
+
 import type { ServerType } from "@hono/node-server";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
@@ -7,6 +12,7 @@ import { authMiddleware } from "./auth/auth.middleware";
 import { env } from "./config/env";
 import { logger } from "./shared/logger";
 
+// —— 进程信号与未捕获异常处理 ——
 function registerProcessHandlers(server: ServerType): void {
   process.on("SIGTERM", () => {
     logger.info("Received SIGTERM, shutting down");
@@ -36,14 +42,16 @@ function registerProcessHandlers(server: ServerType): void {
 }
 
 async function bootstrap(): Promise<void> {
+  // 创建 Hono 应用实例
   const app = new Hono();
 
-  // Mount auth routes
+  // 挂载认证路由
   app.route("/auth", authRoutes);
 
-  // Mount protected /me endpoint at root
+  // 挂载受保护的 /me 端点
   app.get("/me", authMiddleware, meHandler);
 
+  // 启动 HTTP 服务
   const server = serve({
     fetch: app.fetch,
     port: env.PORT,
@@ -54,4 +62,5 @@ async function bootstrap(): Promise<void> {
   logger.info("Server started", { port: env.PORT });
 }
 
+// 应用入口
 void bootstrap();
