@@ -77,7 +77,8 @@ curl http://localhost:4399/user/profile \
 | `npm run format:check` | 格式检查 |
 | `npm run build` | 构建输出到 `dist/` |
 | `npm run start` | 运行构建产物 |
-| `npm run prisma:generate` | 重新生成 Prisma 客户端 |
+| `npm run start:test` | 测试环境运行构建产物（`APP_ENV=test`） |
+| `npm run start:prod` | 生产环境运行构建产物（`APP_ENV=prod`） |
 | `npm run prisma:migrate` | 执行数据库迁移 |
 | `npm run prisma:migrate:test` | 测试环境迁移 |
 | `npm run prisma:migrate:prod` | 生产环境部署迁移 |
@@ -108,6 +109,7 @@ curl http://localhost:4399/user/profile \
 │   │   ├── prisma.ts             # Prisma 客户端单例（pg adapter）
 │   │   ├── logger.ts             # 结构化 JSON 日志
 │   │   └── process-handlers.ts   # 进程信号与异常处理
+├── generated/                # Prisma 客户端输出（`prisma generate` 生成）
 ├── prisma.config.ts          # Prisma CLI 环境变量配置
 ├── .env.example              # 环境变量模板
 ├── tsconfig.json

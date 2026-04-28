@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { defineConfig, env } from "prisma/config";
 
 /**
- * Prisma CLI 独立的环境变量加载（与应用 src/config/env.ts 互不干扰）
+ * Prisma CLI 独立的环境变量加载（与应用 src/utils/env.ts 互不干扰）
  *
  * Prisma v7 不再自动读取 .env 文件，需在此手动加载。
  * 策略：优先加载 .env.{APP_ENV}，再以 .env 补全缺失项。
