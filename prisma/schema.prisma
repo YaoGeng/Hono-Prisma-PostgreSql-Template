@@ -10,24 +10,3 @@ datasource db {
   provider = "postgresql"
   // 不在此处配置 url — Prisma v7 通过 prisma.config.ts 的 env("DATABASE_URL") 读取
 }
-
-model User {
-  id            String         @id @default(uuid())  // 主键，UUID 自动生成
-  email         String         @unique               // 邮箱，唯一约束
-  passwordHash  String                                // bcrypt 哈希后的密码
-  createdAt     DateTime       @default(now())        // 记录创建时间
-  updatedAt     DateTime       @updatedAt             // 自动更新时间
-  refreshTokens RefreshToken[]                        // 一对多关联：该用户的所有 Refresh Token
-}
-
-model RefreshToken {
-  id        String   @id @default(uuid())  // 主键
-  tokenHash String                         // Refresh Token 的 SHA256 哈希（原始令牌仅存于客户端）
-  userId    String                         // 所属用户 ID
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expiresAt DateTime                       // 过期时间
-  createdAt DateTime @default(now())
-
-  @@index([userId])     // 按用户 ID 快速查找
-  @@index([tokenHash])  // 按令牌哈希快速查找（refresh 时查询）
-}

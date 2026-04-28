@@ -87,8 +87,12 @@ curl http://localhost:4399/user/profile \
 
 ```
 ├── prisma/
-│   ├── schema.prisma        # 数据模型（User, RefreshToken）
-│   └── migrations/           # 迁移文件
+│   ├── schema.prisma        # datasource + generator（主文件）
+│   ├── models/              # 按业务拆分的模型文件（递归扫描）
+│   │   └── auth/
+│   │       ├── credential.prisma  # model User
+│   │       └── session.prisma     # model RefreshToken
+│   └── migrations/
 ├── src/
 │   ├── index.ts              # 应用入口：启动服务、注册进程处理
 │   ├── routes/               # 路由注册中心 + 业务路由

@@ -21,7 +21,7 @@ if (existsSync(envFile)) {
 dotenv.config({ override: false });
 
 export default defineConfig({
-  schema: "prisma/schema.prisma",
+  schema: "prisma",  // 多文件 Schema：Prisma 读取 prisma/ 下（含子目录）所有 .prisma 文件
   migrations: {
     path: "prisma/migrations",
   },
