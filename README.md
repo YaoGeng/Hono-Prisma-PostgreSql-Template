@@ -35,7 +35,7 @@ npm run build
 | `POST` | `/auth/register` | 否 | 注册新用户（email + password ≥ 8 位）→ 返回 `{ accessToken, refreshToken }` |
 | `POST` | `/auth/login` | 否 | 登录 → 返回 `{ accessToken, refreshToken }` |
 | `POST` | `/auth/refresh` | 否 | 刷新令牌（传入 refreshToken）→ 返回新令牌对（旧令牌立即失效） |
-| `GET` | `/me` | Bearer JWT | 获取当前用户信息 `{ id, email, createdAt }` |
+| `GET` | `/user/profile` | Bearer JWT | 获取当前用户信息 `{ id, email, createdAt }` |
 
 ### 请求示例
 
@@ -53,10 +53,10 @@ curl -X POST http://localhost:4399/auth/register \
 # }
 ```
 
-**访问受保护端点**
+**获取用户信息**
 
 ```bash
-curl http://localhost:4399/me \
+curl http://localhost:4399/user/profile \
   -H "Authorization: Bearer <accessToken>"
 
 # 响应 200
@@ -90,17 +90,21 @@ curl http://localhost:4399/me \
 │   ├── schema.prisma        # 数据模型（User, RefreshToken）
 │   └── migrations/           # 迁移文件
 ├── src/
-│   ├── index.ts              # 入口：Hono 实例、路由挂载、进程处理
-│   ├── auth/
-│   │   ├── auth.routes.ts    # 注册/登录/刷新/me 处理器
-│   │   ├── auth.schemas.ts   # Zod 请求体验证
-│   │   └── auth.middleware.ts # JWT Bearer 认证中间件
-│   ├── config/
-│   │   └── env.ts            # 环境变量加载与校验（Zod）
-│   ├── lib/
-│   │   └── prisma.ts         # Prisma 客户端单例（pg adapter）
-│   └── shared/
-│       └── logger.ts         # 结构化 JSON 日志
+│   ├── index.ts              # 应用入口：启动服务、注册进程处理
+│   ├── routes/               # 路由注册中心 + 业务路由
+│   │   ├── index.ts          # 路由注册中心（聚合子路由）
+│   │   ├── auth/
+│   │   │   ├── auth.routes.ts    # /auth/register, /auth/login, /auth/refresh
+│   │   │   ├── auth.schemas.ts   # Zod 请求体验证
+│   │   │   └── auth.middleware.ts # JWT Bearer 认证中间件
+│   │   └── user/
+│   │       └── user.routes.ts    # /user/profile（获取当前用户信息）
+│   ├── utils/                # 通用工具
+│   │   ├── prisma.ts             # Prisma 客户端单例（pg adapter）
+│   │   ├── logger.ts             # 结构化 JSON 日志
+│   │   └── process-handlers.ts   # 进程信号与异常处理
+│   └── config/
+│       └── env.ts            # 环境变量加载与校验（Zod）
 ├── prisma.config.ts          # Prisma CLI 环境变量配置
 ├── .env.example              # 环境变量模板
 ├── tsconfig.json

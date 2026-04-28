@@ -5,7 +5,7 @@
  * 使用 HS256 对称签名，secret 由环境变量注入。
  */
 import { jwt } from "hono/jwt";
-import { env } from "../config/env";
+import { env } from "../../config/env";
 
 // jwt() 返回 Hono 中间件，验证失败自动返回 401
 export const authMiddleware = jwt({

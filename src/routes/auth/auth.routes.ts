@@ -3,8 +3,8 @@ import type { Context } from "hono";
 import { sign } from "hono/utils/jwt/jwt";
 import bcrypt from "bcryptjs";
 import { createHash, randomUUID } from "node:crypto";
-import { prisma } from "../lib/prisma";
-import { env } from "../config/env";
+import { prisma } from "../../utils/prisma";
+import { env } from "../../config/env";
 import { registerSchema, loginSchema, refreshSchema } from "./auth.schemas";
 /** RefreshToken 有效期：7 天（毫秒） */
 const REFRESH_TOKEN_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -144,23 +144,10 @@ const refreshHandler = async (c: Context) => {
   return c.json({ accessToken, refreshToken }, 200);
 };
 
-/** 当前用户信息处理器：解析 JWT payload 中的 sub → 查询用户 → 返回（不含 passwordHash） */
-const meHandler = async (c: Context) => {
-  // 从 JWT 中间件提取已解码的 payload
-  const jwtPayload = c.get("jwtPayload") as { sub: string; email: string; exp: number };
-  const user = await prisma.user.findUnique({ where: { id: jwtPayload.sub } });
-
-  if (!user) {
-    return c.json({ error: "User not found" }, 401);
-  }
-
-  return c.json({ id: user.id, email: user.email, createdAt: user.createdAt }, 200);
-};
-
-/** 路由挂载：/register、/login、/refresh；meHandler 由外层 jwt 中间件装饰后使用 */
+/** 公开认证路由：/register、/login、/refresh */
 const authRoutes = new Hono();
 authRoutes.post("/register", registerHandler);
 authRoutes.post("/login", loginHandler);
 authRoutes.post("/refresh", refreshHandler);
 
-export { authRoutes, meHandler };
+export { authRoutes };
