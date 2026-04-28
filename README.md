@@ -1,4 +1,4 @@
-# Prisma PostgreSQL 生产模板
+# Hono + Prisma PostgreSQL 生产模板
 
 基于 Hono + Prisma v7 的 TypeScript REST API 生产骨架，内置 JWT 认证体系。
 

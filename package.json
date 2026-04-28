@@ -1,7 +1,8 @@
 {
   "name": "template",
   "version": "1.0.0",
-  "description": "Production-ready Prisma PostgreSQL template",
+  "description": "Production-ready Hono + Prisma PostgreSQL REST API template",
+  "keywords": ["hono", "prisma", "postgresql", "typescript", "jwt", "rest-api"],
   "main": "dist/src/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
