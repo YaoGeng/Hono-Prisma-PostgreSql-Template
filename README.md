@@ -104,11 +104,10 @@ curl http://localhost:4399/user/profile \
 │   │   └── user/
 │   │       └── user.routes.ts    # /user/profile（获取当前用户信息）
 │   ├── utils/                # 通用工具
+│   │   ├── env.ts                # 环境变量加载与校验（Zod）
 │   │   ├── prisma.ts             # Prisma 客户端单例（pg adapter）
 │   │   ├── logger.ts             # 结构化 JSON 日志
 │   │   └── process-handlers.ts   # 进程信号与异常处理
-│   └── config/
-│       └── env.ts            # 环境变量加载与校验（Zod）
 ├── prisma.config.ts          # Prisma CLI 环境变量配置
 ├── .env.example              # 环境变量模板
 ├── tsconfig.json

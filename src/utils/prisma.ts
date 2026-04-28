@@ -4,7 +4,7 @@
  */
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../../generated/prisma/client";
-import { env } from "../config/env";
+import { env } from "./env";
 
 // 实例化 Pg 适配器：使用集中校验后的 DATABASE_URL
 

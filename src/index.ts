@@ -8,7 +8,7 @@ import { serve } from "@hono/node-server";
 import { routes } from "./routes";
 import { registerProcessHandlers } from "./utils/process-handlers";
 
-import { env } from "./config/env";
+import { env } from "./utils/env";
 import { logger } from "./utils/logger";
 
 

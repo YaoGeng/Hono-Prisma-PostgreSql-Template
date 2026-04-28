@@ -4,7 +4,7 @@ import { sign } from "hono/utils/jwt/jwt";
 import bcrypt from "bcryptjs";
 import { createHash, randomUUID } from "node:crypto";
 import { prisma } from "../../utils/prisma";
-import { env } from "../../config/env";
+import { env } from "../../utils/env";
 import { registerSchema, loginSchema, refreshSchema } from "./auth.schemas";
 /** RefreshToken 有效期：7 天（毫秒） */
 const REFRESH_TOKEN_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
